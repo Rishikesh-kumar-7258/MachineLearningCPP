@@ -299,16 +299,130 @@ namespace basicml
         return result;
       }
 
+      // remove row from matrix
+      Matrix<T> removeRow(size_t row)
+      {
+        if (row < 0 || row >= this->getRows())
+        {
+          throw invalid_argument("Index out of range");
+        }
+
+        Matrix<T> result(this->getRows() - 1, this->getCols());
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          if (i < row)
+          {
+            result.data[i] = this->data[i];
+          }
+          else if (i > row)
+          {
+            result.data[i - 1] = this->data[i];
+          }
+        }
+        return result;
+      }
+
+      // remove column from matrix
+      Matrix<T> removeCol(size_t col)
+      {
+        if (col < 0 || col >= this->getCols())
+        {
+          throw invalid_argument("Index out of range");
+        }
+
+        Matrix<T> result(this->getRows(), this->getCols() - 1);
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            if (j < col)
+            {
+              result.data[i][j] = this->data[i][j];
+            }
+            else if (j > col)
+            {
+              result.data[i][j - 1] = this->data[i][j];
+            }
+          }
+        }
+        return result;
+      }
+
       // get minor of matrix
       Matrix<T> minor(size_t row, size_t col)
       {
-        return this->subMatrix(0, this->getRows() - 2, 0, this->getCols() - 2);
+        return this->removeRow(row).removeCol(col);
+      }
+
+      // get determinant of matrix
+      T determinant()
+      {
+        if (this->getRows() != this->getCols())
+        {
+          throw invalid_argument("Matrix is not square");
+        }
+
+        if (this->getRows() == 1)
+        {
+          return this->data[0][0];
+        }
+
+        T det = 0;
+        for (size_t i = 0; i < this->getCols(); i++)
+        {
+          det += (i % 2 == 0 ? 1 : -1) * this->data[0][i] * this->minor(0, i).determinant();
+        }
+        return det;
       }
 
       // get cofactor of matrix
-      Matrix<T> cofactor(size_t row, size_t col)
+      Matrix<T> cofactor()
       {
-        return this->minor(row, col);
+        Matrix<T> result(this->getRows(), this->getCols());
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            result.data[i][j] = (i + j) % 2 == 0 ? 1 : -1 * this->minor(i, j).determinant();
+          }
+        }
+        return result;
+      }
+
+      // get adjoint of matrix
+      Matrix<T> adjoint()
+      {
+        return this->cofactor().transpose();
+      }
+
+      // get inverse of matrix
+      Matrix<T> inverse()
+      {
+        T det = this->determinant();
+        if (det == 0)
+        {
+          throw invalid_argument("Matrix is singular");
+        }
+        return this->adjoint() / det;
+      }
+
+      // multiply two matrices at corresponding positions
+      Matrix<T> hadamardProduct(const Matrix<T> &m)
+      {
+        if (this->getRows() != m.getRows() || this->getCols() != m.getCols())
+        {
+          throw invalid_argument("Matrix dimensions do not match");
+        }
+
+        Matrix<T> result(this->getRows(), this->getCols());
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            result.data[i][j] = this->data[i][j] * m.data[i][j];
+          }
+        }
+        return result;
       }
     };
   }

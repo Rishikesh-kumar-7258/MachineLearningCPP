@@ -14,7 +14,19 @@ int main()
   }
   Matrix<int> matrix(v);
 
+  cout << "Original Matrix" << endl;
   cout << matrix << endl;
+
+  cout << "Matrix Minor" << endl;
   cout << matrix.minor(1, 1) << endl;
+
+  cout << "Matrix transpose" << endl;
+  cout << matrix.transpose() << endl;
+
+  cout << "Matrix determinant" << endl;
+  cout << matrix.determinant() << endl;
+
+  cout << "Matrix inverse" << endl;
+  cout << matrix.inverse() << endl;
   return 0;
 }
