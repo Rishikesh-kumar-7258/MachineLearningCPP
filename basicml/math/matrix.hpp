@@ -1,6 +1,8 @@
 /**
  * @file matrix.hpp
  * @brief This file contains the definition of the Matrix class
+ * @ingroup Math
+ * @date 2021-08-29
  * @author Rishikesh Kumar
  */
 
@@ -420,6 +422,55 @@ namespace basicml
           for (size_t j = 0; j < this->getCols(); j++)
           {
             result.data[i][j] = this->data[i][j] * m.data[i][j];
+          }
+        }
+        return result;
+      }
+
+      // join two matrices horizontally
+      Matrix<T> hstack(const Matrix<T> &m)
+      {
+        if (this->getRows() != m.getRows())
+        {
+          throw invalid_argument("Matrix dimensions do not match");
+        }
+
+        Matrix<T> result(this->getRows(), this->getCols() + m.getCols());
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            result.data[i][j] = this->data[i][j];
+          }
+          for (size_t j = 0; j < m.getCols(); j++)
+          {
+            result.data[i][this->getCols() + j] = m.data[i][j];
+          }
+        }
+        return result;
+      }
+
+      // join two matrices vertically
+      Matrix<T> vstack(const Matrix<T> &m)
+      {
+        if (this->getCols() != m.getCols())
+        {
+          throw invalid_argument("Matrix dimensions do not match");
+        }
+
+        Matrix<T> result(this->getRows() + m.getRows(), this->getCols());
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            result.data[i][j] = this->data[i][j];
+          }
+        }
+        for (size_t i = 0; i < m.getRows(); i++)
+        {
+          for (size_t j = 0; j < m.getCols(); j++)
+          {
+            result.data[this->getRows() + i][j] = m.data[i][j];
           }
         }
         return result;

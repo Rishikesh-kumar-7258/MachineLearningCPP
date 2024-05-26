@@ -1,32 +1,33 @@
-#include "basicml/math/matrix.hpp"
-using namespace basicml::math;
+#include "basicml/models/LinearRegression/NormalForm.hpp"
+using namespace basicml::models::LinearRegression;
 
 int main()
 {
-  vector<vector<int>> v(3, vector<int>(3, 0));
-  int count = 1;
-  for (int i = 0; i < 3; i++)
-  {
-    for (int j = 0; j < 3; j++)
-    {
-      v[i][j] = count++;
-    }
-  }
-  Matrix<int> matrix(v);
+  Matrix<double> X(2, 2);
+  X(0, 0) = 5;
+  X(0, 1) = 6;
+  X(1, 0) = 11;
+  X(1, 1) = 13;
 
-  cout << "Original Matrix" << endl;
-  cout << matrix << endl;
+  Matrix<double> Y(2, 1);
+  Y(0, 0) = 5;
+  Y(1, 0) = 6;
 
-  cout << "Matrix Minor" << endl;
-  cout << matrix.minor(1, 1) << endl;
+  NormalForm model;
+  model.fit(X, Y);
+  Matrix<double> parameters = model.getParameters();
+  std::cout << "Parameters: " << std::endl
+            << parameters << std::endl;
 
-  cout << "Matrix transpose" << endl;
-  cout << matrix.transpose() << endl;
+  Matrix<double> X_test(2, 2);
+  X_test(0, 0) = 7;
+  X_test(0, 1) = 8;
+  X_test(1, 0) = 9;
+  X_test(1, 1) = 10;
 
-  cout << "Matrix determinant" << endl;
-  cout << matrix.determinant() << endl;
+  Matrix<double> predictions = model.predict(X);
+  std::cout << "Predictions: " << std::endl
+            << predictions << std::endl;
 
-  cout << "Matrix inverse" << endl;
-  cout << matrix.inverse() << endl;
   return 0;
 }
