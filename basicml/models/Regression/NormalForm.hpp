@@ -1,7 +1,7 @@
 /**
  * @file NormalForm.hpp
  * @brief This file contains the declaration of the NormalForm class.
- * @ingroup LinearRegression
+ * @ingroup Regression
  * @date 2021-08-29
  * @author Rishikesh Kumar
  */
@@ -16,22 +16,22 @@ namespace basicml
 {
   namespace models
   {
-    namespace LinearRegression
+    namespace Regression
     {
       class NormalForm : protected BasicModel
       {
       public:
         NormalForm() : BasicModel() {}
 
+        // train function
         void fit(Matrix<double> x, Matrix<double> y)
         {
-          // setX(Matrix<double>(x.getRows(), 1, 1).hstack(x));
           setX(x);
           setY(y);
-          // setTheta((getX().transpose() * getX()).inverse() * (getX().transpose() * getY()));
           setTheta((getX().transpose() * getX()).inverse() * getX().transpose() * getY());
         }
 
+        // predict function
         Matrix<double> predict(Matrix<double> X)
         {
           return (X * getTheta());
@@ -42,7 +42,7 @@ namespace basicml
           return getTheta();
         }
       };
-    } // namespace LinearRegression
+    } // namespace Regression
   } // namespace models
 } // namespace basicml
 

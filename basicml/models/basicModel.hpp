@@ -22,23 +22,6 @@ namespace basicml
       Matrix<double> theta;
       Matrix<double> X, Y;
 
-    protected:
-      // Setters
-      void setX(Matrix<double> X)
-      {
-        this->X = X;
-      }
-
-      void setY(Matrix<double> Y)
-      {
-        this->Y = Y;
-      }
-
-      void setTheta(Matrix<double> theta)
-      {
-        this->theta = theta;
-      }
-
     public:
       // Constructor
       BasicModel() {}
@@ -58,6 +41,7 @@ namespace basicml
       {
         return theta;
       }
+
       // training function
       virtual void fit(Matrix<double> x, Matrix<double> y) = 0;
 
@@ -66,6 +50,22 @@ namespace basicml
 
       // get parameters
       virtual Matrix<double> getParameters() = 0;
+
+      // Setters
+      void setX(Matrix<double> X)
+      {
+        this->X = X;
+      }
+
+      void setY(Matrix<double> Y)
+      {
+        this->Y = Y;
+      }
+
+      void setTheta(Matrix<double> theta)
+      {
+        this->theta = theta;
+      }
     };
   } // namespace models
 } // namespace basicml

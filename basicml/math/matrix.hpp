@@ -37,9 +37,19 @@ namespace basicml
       }
 
       // creating matrix with given size
-      Matrix(size_t rows, size_t cols)
+      Matrix(size_t rows, size_t cols, bool random = false)
       {
         this->data = vector<vector<T>>(rows, vector<T>(cols));
+        if (random)
+        {
+          for (size_t i = 0; i < rows; i++)
+          {
+            for (size_t j = 0; j < cols; j++)
+            {
+              this->data[i][j] = rand() % 100;
+            }
+          }
+        }
       }
 
       // creating matrix with given rows
@@ -474,6 +484,20 @@ namespace basicml
           }
         }
         return result;
+      }
+
+      // sum of all elements of matrix
+      T sum()
+      {
+        T s = 0;
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            s += this->data[i][j];
+          }
+        }
+        return s;
       }
     };
   }
