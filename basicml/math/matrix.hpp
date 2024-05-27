@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 namespace basicml
@@ -62,6 +63,12 @@ namespace basicml
       Matrix()
       {
         this->data = vector<vector<T>>();
+      }
+
+      // getting shape of matrix
+      pair<size_t, size_t> shape() const
+      {
+        return {this->data.size(), this->data[0].size()};
       }
 
       // getting number of rows
@@ -499,7 +506,159 @@ namespace basicml
         }
         return s;
       }
+
+      // get column of the matrix
+      Matrix<T> getColumn(size_t col)
+      {
+        if (col < 0 || col >= this->getCols())
+        {
+          throw invalid_argument("Index out of range");
+        }
+
+        Matrix<T> result(this->getRows(), 1);
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          result.data[i][0] = this->data[i][col];
+        }
+        return result;
+      }
+
+      // get row of the matrix
+      Matrix<T> getRow(size_t row)
+      {
+        if (row < 0 || row >= this->getRows())
+        {
+          throw invalid_argument("Index out of range");
+        }
+
+        Matrix<T> result(1, this->getCols());
+        for (size_t i = 0; i < this->getCols(); i++)
+        {
+          result.data[0][i] = this->data[row][i];
+        }
+        return result;
+      }
+
+      // get mean of the matrix
+      T mean()
+      {
+        return this->sum() / (this->getRows() * this->getCols());
+      }
+
+      // get sum of the matrix along axis
+      Matrix<T> sum(int axis)
+      {
+        if (axis == 0)
+        {
+          Matrix<T> result(1, this->getCols());
+          for (size_t i = 0; i < this->getCols(); i++)
+          {
+            for (size_t j = 0; j < this->getRows(); j++)
+            {
+              result.data[0][i] += this->data[j][i];
+            }
+          }
+          return result;
+        }
+        else if (axis == 1)
+        {
+          Matrix<T> result(this->getRows(), 1);
+          for (size_t i = 0; i < this->getRows(); i++)
+          {
+            for (size_t j = 0; j < this->getCols(); j++)
+            {
+              result.data[i][0] += this->data[i][j];
+            }
+          }
+          return result;
+        }
+        else
+        {
+          throw invalid_argument("Invalid axis");
+        }
+      }
+
+      // get mean of the matrix along axis
+      Matrix<T> mean(int axis)
+      {
+        if (axis == 0)
+        {
+          return this->sum(0) / this->getRows();
+        }
+        else if (axis == 1)
+        {
+          return this->sum(1) / this->getCols();
+        }
+        else
+        {
+          throw invalid_argument("Invalid axis");
+        }
+      }
+
+      // get standard deviation of the matrix
+      T std()
+      {
+        T m = this->mean();
+        T s = 0;
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            s += (this->data[i][j] - m) * (this->data[i][j] - m);
+          }
+        }
+        return std::sqrt(s / (this->getRows() * this->getCols()));
+      }
+
+      // find square root of each element in the matrix
+      Matrix<T> sqrt()
+      {
+        Matrix<T> result(this->getRows(), this->getCols());
+        for (size_t i = 0; i < this->getRows(); i++)
+        {
+          for (size_t j = 0; j < this->getCols(); j++)
+          {
+            result.data[i][j] = std::sqrt(this->data[i][j]);
+          }
+        }
+        return result;
+      }
+
+      // get standard deviation of the matrix along axis
+      Matrix<T> std(int axis)
+      {
+        if (axis > 1 or axis < 0)
+        {
+          throw invalid_argument("Invalid axis");
+        }
+
+        Matrix<T> m = this->mean(axis);
+        Matrix<T> s(this->getRows(), this->getCols());
+        if (axis == 0)
+        {
+          for (size_t i = 0; i < this->getCols(); i++)
+          {
+            for (size_t j = 0; j < this->getRows(); j++)
+            {
+              s.data[j][i] = (this->data[j][i] - m.data[0][i]) * (this->data[j][i] - m.data[0][i]);
+            }
+          }
+          return s.mean(0).sqrt();
+        }
+        else
+        {
+          for (size_t i = 0; i < this->getRows(); i++)
+          {
+            for (size_t j = 0; j < this->getCols(); j++)
+            {
+              s.data[i][j] = (this->data[i][j] - m.data[i][0]) * (this->data[i][j] - m.data[i][0]);
+            }
+          }
+          return s.mean(1).sqrt();
+        }
+      }
     };
+
   }
 }
 

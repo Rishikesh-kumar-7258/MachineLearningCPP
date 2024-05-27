@@ -18,7 +18,7 @@ namespace basicml
   {
     namespace Regression
     {
-      class batchGDRegressor : protected BasicModel
+      class BatchGDRegressor : protected BasicModel
       {
       private:
         double _lr, _tolerance;
@@ -26,13 +26,14 @@ namespace basicml
 
       public:
         // Constructor
-        batchGDRegressor(double lr = 0.1, int epochs = 1000, double tolerance = 0.1) : BasicModel()
+        BatchGDRegressor(double lr = 0.1, int epochs = 1000, double tolerance = 0.1) : BasicModel()
         {
           _lr = lr;
           _epochs = epochs;
           _tolerance = tolerance;
         }
 
+        // training function
         void fit(Matrix<double> x, Matrix<double> y)
         {
           setX(Matrix<double>(x.getRows(), 1, (double)1).hstack(x));
@@ -43,9 +44,10 @@ namespace basicml
 
           cout << "Training: " << endl;
           // gradient descent
+          double prevMSE = -1;
           for (int i = 0; i < _epochs; i++)
           {
-            cout << "Epoch: " << i + 1 << "/" << _epochs << endl;
+            cout << "Epoch: " << i + 1 << "/" << _epochs << " => ";
 
             Matrix<double> theta = getTheta();
             Matrix<double> h = getX() * theta;
@@ -53,14 +55,25 @@ namespace basicml
             Matrix<double> gradient = (getX().transpose() * (h - getY())) / getY().getRows();
             setTheta(theta - _lr * gradient);
 
-            if (mse <= _tolerance)
-              break;
+            cout << "MSE: " << mse << endl;
+
+            // if (prevMSE != -1 && prevMSE - mse < _tolerance)
+            //   break;
+
+            // prevMSE = mse;
           }
         }
 
+        // prediction function
         Matrix<double> predict(Matrix<double> X)
         {
-          setTheta((getX().transpose() * getX()).inverse() * getX().transpose() * getY());
+          return X.hstack(Matrix<double>(X.getRows(), 1, (double)1)) * getTheta();
+        }
+
+        // get parameters
+        Matrix<double> getParameters()
+        {
+          return getTheta();
         }
       };
     } // namespace Regression
