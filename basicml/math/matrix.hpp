@@ -372,7 +372,7 @@ namespace basicml
         T det = 0;
         for (size_t i = 0; i < this->getCols(); i++)
         {
-          det += (i % 2 == 0 ? 1 : -1) * this->data[0][i] * this->minor(0, i).determinant();
+          det += ((i & 1) ? -1 : 1) * this->data[0][i] * this->minor(0, i).determinant();
         }
         return det;
       }
@@ -385,7 +385,7 @@ namespace basicml
         {
           for (size_t j = 0; j < this->getCols(); j++)
           {
-            result.data[i][j] = (i + j) % 2 == 0 ? 1 : -1 * this->minor(i, j).determinant();
+            result.data[i][j] = (((i + j) & 1) ? -1 : 1) * this->minor(i, j).determinant();
           }
         }
         return result;

@@ -25,11 +25,11 @@ namespace basicml
 
         void fit(Matrix<double> x, Matrix<double> y)
         {
-          setX(Matrix<double>(x.getRows(), 1, 1).hstack(x));
-          // setX(x);
+          // setX(Matrix<double>(x.getRows(), 1, 1).hstack(x));
+          setX(x);
           setY(y);
-          setTheta((getX().transpose() * getX()).inverse() * (getX().transpose() * getY()));
-          // setTheta((getX().transpose() * getX()).inverse() * getX().transpose() * getY());
+          // setTheta((getX().transpose() * getX()).inverse() * (getX().transpose() * getY()));
+          setTheta((getX().transpose() * getX()).inverse() * getX().transpose() * getY());
         }
 
         Matrix<double> predict(Matrix<double> X)

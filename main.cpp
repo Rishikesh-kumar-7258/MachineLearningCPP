@@ -13,6 +13,26 @@ int main()
   Y(0, 0) = 5;
   Y(1, 0) = 6;
 
+  // Matrix<double> theta = X.transpose();
+  // cout << "transpose : " << endl;
+  // cout << theta << endl;
+
+  // theta = theta * X;
+  // cout << "transpose * X : " << endl;
+  // cout << theta << endl;
+
+  // double det = theta.determinant();
+  // cout << "determinant : " << endl;
+  // cout << det << endl;
+
+  // Matrix<double> adj = theta.adjoint();
+  // cout << "adjoint : " << endl;
+  // cout << adj << endl;
+
+  // theta = theta.inverse();
+  // cout << "inverse : " << endl;
+  // cout << theta << endl;
+
   NormalForm model;
   model.fit(X, Y);
   Matrix<double> parameters = model.getParameters();
@@ -25,7 +45,7 @@ int main()
   X_test(1, 0) = 9;
   X_test(1, 1) = 10;
 
-  Matrix<double> predictions = model.predict(X);
+  Matrix<double> predictions = model.predict(X_test);
   std::cout << "Predictions: " << std::endl
             << predictions << std::endl;
 
