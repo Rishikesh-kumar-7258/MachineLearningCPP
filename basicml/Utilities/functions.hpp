@@ -12,6 +12,7 @@
 #include "dataframe.hpp"
 #include <fstream>
 #include <sstream>
+#include <map>
 using namespace basicml::Utilities;
 
 namespace basicml
@@ -123,6 +124,24 @@ namespace basicml
     double mean_squared_error(Matrix<double> y_true, Matrix<double> y_pred)
     {
       return ((y_true - y_pred).transpose() * (y_true - y_pred)).sum() / (2 * y_true.getRows());
+    }
+
+    // label encoding
+    template <typename T>
+    vector<T> label_encoding(Matrix<string> data)
+    {
+      map<string, int> encoding;
+      T count = 0;
+      vector<T> encoded_data;
+      for (int i = 0; i < data.shape().first; i++)
+      {
+        if (encoding.find(data(i, 0)) == encoding.end())
+        {
+          encoding[data(i, 0)] = count++;
+        }
+        encoded_data.push_back(encoding[data(i, 0)]);
+      }
+      return encoded_data;
     }
 
   } // namespace Utilities

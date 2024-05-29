@@ -13,7 +13,7 @@ int main()
   cout << df.head() << endl;
   cout << df.tail() << endl;
 
-  auto X = df.removeColumn("median_house_value").removeColumn("ocean_proximity");
+  auto X = df.removeColumn("median_house_value");
   auto Y = df.getColumn("median_house_value");
 
   cout << X.head() << endl;
@@ -30,7 +30,6 @@ int main()
   // cout << Y_train << endl;
   BatchGDRegressor model(0.5, 100, 1e-3);
   auto data_train_double = processData(X_train, Y_train);
-  model.fit(data_train_double.first, data_train_double.second);
 
   // printing theta
   cout << "Parameters :" << endl
@@ -54,6 +53,8 @@ int main()
 
 pair<Matrix<double>, Matrix<double>> processData(Matrix<string> &X, Matrix<string> &Y)
 {
+  // encoding ocean proximity data
+
   // convert string data to double
   Matrix<double> X_double(X.shape().first, X.shape().second);
   Matrix<double> Y_double(Y.shape().first, Y.shape().second);

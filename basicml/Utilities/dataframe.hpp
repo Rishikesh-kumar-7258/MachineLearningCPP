@@ -133,6 +133,26 @@ namespace basicml
         return DataFrame<T>(m, new_columns);
       }
 
+      // add column
+      DataFrame<T> addColumn(vector<T> data, string name)
+      {
+        if (data.size() != this->data.getRows())
+        {
+          throw runtime_error("Data size does not match");
+        }
+        vector<string> new_columns = columns;
+        new_columns.push_back(name);
+        vector<vector<T>> new_data;
+        for (int i = 0; i < this->data.getRows(); i++)
+        {
+          vector<T> row = this->data[i];
+          row.push_back(data[i]);
+          new_data.push_back(row);
+        }
+        Matrix<T> m(new_data);
+        return DataFrame<T>(m, new_columns);
+      }
+
       // get column
       DataFrame<T> getColumn(string column)
       {
@@ -185,7 +205,7 @@ namespace basicml
         Matrix<T> m(new_data);
         return DataFrame<T>(m, columns);
       }
-        };
+    };
   } // namespace Utilities
 } // namespace basicml
 

@@ -65,6 +65,12 @@ namespace basicml
         this->data = vector<vector<T>>();
       }
 
+      // copy constructor
+      Matrix(const Matrix<T> &m)
+      {
+        this->data = m.data;
+      }
+
       // getting shape of matrix
       pair<size_t, size_t> shape() const
       {
@@ -81,6 +87,24 @@ namespace basicml
       size_t getCols() const
       {
         return this->data[0].size();
+      }
+
+      // Identity Matrix
+      static Matrix<T> Identity(size_t n)
+      {
+        Matrix<T> result(n, n);
+        for (size_t i = 0; i < n; i++)
+        {
+          result.data[i][i] = 1;
+        }
+        return result;
+      }
+
+      // overloading = operator to assign matrix
+      Matrix<T> &operator=(const Matrix<T> &m)
+      {
+        this->data = m.data;
+        return *this;
       }
 
       // overloading << operator to print matrix

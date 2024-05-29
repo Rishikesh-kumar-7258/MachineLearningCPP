@@ -170,7 +170,7 @@ namespace basicml
       {
         return acos(dot(v) / (magnitude() * v.magnitude()));
       }
-    };
+        };
   } // namespace math
 } // namespace basicml
 
