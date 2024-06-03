@@ -651,7 +651,7 @@ namespace basicml
       // get standard deviation of the matrix along axis
       Matrix<T> std(int axis)
       {
-        if (axis > 1 or axis < 0)
+        if (axis > 1 || axis < 0)
         {
           throw invalid_argument("Invalid axis");
         }
