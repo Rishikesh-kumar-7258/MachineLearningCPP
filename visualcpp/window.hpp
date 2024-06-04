@@ -37,7 +37,7 @@ namespace visualcpp
         HWND hWnd;
 
     public:
-        Window() : hInstance(GetModuleHandle(nullptr))
+        Window(int width = 640, int height = 480, std::string name = "Sample Window") : hInstance(GetModuleHandle(nullptr))
         {
             auto *CLASS_NAME = _T("Sample Window Class");
 
@@ -52,9 +52,6 @@ namespace visualcpp
 
             DWORD style = WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU;
 
-            int width = 640;
-            int height = 480;
-
             RECT rect;
             rect.left = 250;
             rect.top = 250;
@@ -66,7 +63,7 @@ namespace visualcpp
             hWnd = CreateWindowEx(
                 0,
                 CLASS_NAME,
-                _T("Sample Window"),
+                _T(name.c_str()),
                 style,
                 rect.left,
                 rect.top,
@@ -81,11 +78,11 @@ namespace visualcpp
         }
         ~Window()
         {
-            auto* CLASS_NAME = _T("Sample Window Class");
+            auto *CLASS_NAME = _T("Sample Window Class");
             UnregisterClass(CLASS_NAME, hInstance);
         }
-        Window(const Window&) = delete;
-        Window& operator=(const Window&) = delete;
+        Window(const Window &) = delete;
+        Window &operator=(const Window &) = delete;
 
         bool processMessages()
         {
